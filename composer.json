@@ -1,0 +1,21 @@
+{
+    "name": "writeligent/doctrine-extensions",
+    "require": {
+        "php": ">=5.4.0",
+        "kdyby/doctrine": "@dev"
+    },
+    "require-dev": {
+        "nette/tester": "@dev"
+    },
+    "license": "[\"BSD-3-Clause\", \"GPL-2.0\", \"GPL-3.0\"]",
+     "autoload": {
+        "psr-4": { "Writeligent\\DoctrineExtensions\\": "src/" }
+    },
+    "authors": [
+        {
+            "name": "Robert Jelen",
+            "email": "robert.jelen@email.cz"
+        }
+    ],
+    "minimum-stability": "dev"
+}

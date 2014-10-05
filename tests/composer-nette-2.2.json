@@ -1,0 +1,17 @@
+{
+    "name": "writeligent/doctrine-extensions",
+    "require": {
+        "kdyby/doctrine": "~2.1"
+    },
+    "require-dev": {
+        "nette/tester": "@dev"
+    },
+    "license": "[\"BSD-3-Clause\", \"GPL-2.0\", \"GPL-3.0\"]",
+    "authors": [
+        {
+            "name": "Robert Jelen",
+            "email": "robert.jelen@email.cz"
+        }
+    ],
+    "minimum-stability": "stable"
+}
