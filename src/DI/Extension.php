@@ -31,10 +31,12 @@ class Extension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig($this->defaults);
 
-		if($config['userStorage']) {
-			$builder->getDefinition('nette.userStorage')
-				->setClass('Writeligent\DoctrineExtensions\Identity\UserStorage')
-				->setFactory(null);
+		if ($config['userStorage']) {
+			$userStorage = $builder->getDefinition('nette.userStorage')
+				->setClass('Writeligent\DoctrineExtensions\Identity\UserStorage');
+			if ($userStorage->factory) {
+				$userStorage->setFactory(null);
+			}
 		}
 	}
 

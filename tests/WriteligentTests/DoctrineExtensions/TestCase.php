@@ -28,8 +28,12 @@ class TestCase extends Tester\TestCase {
 		$rootDir = __DIR__ . '/../../';
 		$config = new Nette\Configurator();
 		\Writeligent\DoctrineExtensions\DI\Extension::register($config);
+		\Kdyby\Events\DI\EventsExtension::register($config);
+		\Kdyby\Console\DI\ConsoleExtension::register($config);
+		\Kdyby\Annotations\DI\AnnotationsExtension::register($config);
+		\Kdyby\Doctrine\DI\OrmExtension::register($config);
 		$this->container = $config->setTempDirectory(TEMP_DIR)
-			->addConfig(__DIR__ . '/../../config/base.neon')
+			->addConfig(__DIR__ . '/../../config/base.neon', $config::NONE)
 			->addParameters(array(
 				'appDir' => $rootDir,
 				'wwwDir' => $rootDir,
