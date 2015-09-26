@@ -24,6 +24,8 @@ class Extension extends CompilerExtension
 
 	protected $defaults = [
 		'userStorage' => true,
+		'sessions' => false,
+		'sessionTable' => 'writeligent_session',
 	];
 
 	public function loadConfiguration()
@@ -38,6 +40,29 @@ class Extension extends CompilerExtension
 				$userStorage->setFactory(null);
 			}
 		}
+
+
+		if ($config['sessions']) {
+			$sessionHandler = $builder->addDefinition($this->prefix('sessionHandler'))
+				->setClass('Writeligent\DoctrineExtensions\Http\SessionHandler', array( 1 => $config['sessionTable']));
+		}
+	}
+
+	public function beforeCompile()
+	{
+		$builder = $this->getContainerBuilder();
+		$config = $this->getConfig($this->defaults);
+
+		if ($config['sessions']) {
+			$session = $builder->getDefinition($builder->getByType('Nette\Http\Session'))
+				->addSetup('?->setHandler(?)', array('@self', '@'.$this->prefix('sessionHandler')));
+		}
+	}
+
+	public function afterCompile(\Nette\PhpGenerator\ClassType $class)
+	{
+		$builder = $this->getContainerBuilder();
+		$config = $this->getConfig($this->defaults);
 	}
 
 	public static function register(Configurator $configurator)

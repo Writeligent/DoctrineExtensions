@@ -12,18 +12,18 @@ use Tester;
 
 class TestCase extends Tester\TestCase {
 
-	/** @var Nette\DI\Container $container */
+	/** @var Nette\DI\Container[] $container */
 	private $container;
 
-	protected function getContainer()
+	protected function getContainer($configName = 'base')
 	{
-		if (empty($this->container)) {
-			$this->createContainer();
+		if (!isset($this->container[$configName])) {
+			$this->container[$configName] = $this->createContainer($configName);
 		}
-		return $this->container;
+		return $this->container[$configName];
 	}
 
-	public function createContainer()
+	public function createContainer($configName = 'base')
 	{
 		$rootDir = __DIR__ . '/../../';
 		$config = new Nette\Configurator();
@@ -32,16 +32,17 @@ class TestCase extends Tester\TestCase {
 		\Kdyby\Console\DI\ConsoleExtension::register($config);
 		\Kdyby\Annotations\DI\AnnotationsExtension::register($config);
 		\Kdyby\Doctrine\DI\OrmExtension::register($config);
-		$this->container = $config->setTempDirectory(TEMP_DIR)
-			->addConfig(__DIR__ . '/../../config/base.neon', $config::NONE)
+		$container = $config->setTempDirectory(TEMP_DIR)
+			->addConfig(__DIR__ . '/../../config/' . $configName . '.neon', $config::NONE)
 			->addParameters(array(
 				'appDir' => $rootDir,
 				'wwwDir' => $rootDir,
 			))
 			->createContainer();
-		$em = $this->container->getByType('Kdyby\Doctrine\EntityManager');
+		$em = $container->getByType('Kdyby\Doctrine\EntityManager');
 		/** @var Kdyby\Doctrine\EntityManager $em */
 		$schemaTool = new SchemaTool($em);
 		$schemaTool->createSchema($em->getMetadataFactory()->getAllMetadata());
+		return $container;
 	}
 }
